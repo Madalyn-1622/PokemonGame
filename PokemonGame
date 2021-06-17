@@ -1,1 +1,494 @@
-pokemonGame
+import java.awt.Color;
+import java.awt.Container;
+import java.awt.Font;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JLabel;
+import javax.swing.JButton;
+import javax.swing.JTextArea;
+
+public class pokemonGame {
+
+	JFrame window;
+	Container con;
+	JPanel titleNamePanel, startButtonPanel, mainTextPanel, choiceButtonPanel, playerPanel;
+	JLabel titleNameLabel, hpLabel, hpLabelNumber, pokemonLabel, pokemonLabelName;
+	Font titleFont = new Font("Times New Roman", Font.PLAIN, 64);
+	Font normalFont = new Font("Times New Roman", Font.PLAIN, 30);
+	JButton startButton, choice1, choice2, choice3, choice4;
+	JTextArea mainTextArea;
+	int pokemonHP, maxPokemonHP, snorlaxHP, position, caught;
+	String pokemon;
+	
+	
+	TitleScreenHandler tsHandler = new TitleScreenHandler();
+	ChoiceHandler choiceHandler = new ChoiceHandler();
+	
+
+	
+	
+	public static void main(String[] args) {
+
+		new pokemonGame();
+	}
+
+	public pokemonGame() {
+		
+		window = new JFrame();
+		window.setSize(800, 600);  
+		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		window.getContentPane().setBackground(Color.black);
+		window.setLayout(null);
+		window.setVisible(true);
+		con = window.getContentPane();
+		
+		titleNamePanel = new JPanel();
+		titleNamePanel.setBounds(100, 100, 600, 150); 
+		titleNamePanel.setBackground(Color.black);
+		titleNameLabel = new JLabel("Pokemon: Java Edition");
+		titleNameLabel.setForeground(Color.white);
+		titleNameLabel.setFont(titleFont);
+		
+		startButtonPanel = new JPanel();
+		startButtonPanel.setBounds(300, 400, 200, 100);
+		startButtonPanel.setBackground(Color.black);
+		
+		startButton = new JButton("START");
+		startButton.setBackground(Color.black);
+		startButton.setForeground(Color.white);
+		startButton.setFont(normalFont);
+		startButton.setFocusPainted(false); 
+		startButton.addActionListener(tsHandler);
+		
+		titleNamePanel.add(titleNameLabel);
+		startButtonPanel.add(startButton);
+		
+		con.add(titleNamePanel);
+		con.add(startButtonPanel);
+		
+	}
+	public void createGameScreen() {
+		
+		titleNamePanel.setVisible(false);
+		startButtonPanel.setVisible(false);
+		
+		
+		mainTextPanel = new JPanel();
+		mainTextPanel.setBounds(100, 100, 600, 250);
+		mainTextPanel.setBackground(Color.black);
+		con.add(mainTextPanel);
+		
+		mainTextArea = new JTextArea("This is the main text area. This game is going to be great! I am sure of it."); //mainTextArea not JTextArea written twice
+		mainTextArea.setBounds(100, 100, 600, 250);
+		mainTextArea.setBackground(Color.black);
+		mainTextArea.setForeground(Color.white);
+		mainTextArea.setFont(normalFont);
+		mainTextArea.setLineWrap(true);
+		mainTextPanel.add(mainTextArea);
+		
+		choiceButtonPanel = new JPanel();
+		choiceButtonPanel.setBounds(250, 350, 300, 150);
+		choiceButtonPanel.setBackground(Color.black);
+		choiceButtonPanel.setLayout(new GridLayout(4,1));
+		con.add(choiceButtonPanel);
+		
+		choice1 = new JButton("Choice One");
+		choice1.setBackground(Color.black);
+		choice1.setForeground(Color.white);
+		choice1.setFont(normalFont);
+		choice1.setFocusPainted(false);
+		choice1.addActionListener(choiceHandler);
+		choice1.setActionCommand("c1");
+		choiceButtonPanel.add(choice1);
+		
+		choice2 = new JButton("Choice Two");
+		choice2.setBackground(Color.black);
+		choice2.setForeground(Color.white);
+		choice2.setFont(normalFont);
+		choice2.setFocusPainted(false);
+		choice2.addActionListener(choiceHandler);
+		choice2.setActionCommand("c2");
+		choiceButtonPanel.add(choice2);
+		
+		choice3 = new JButton("Choice Three");
+		choice3.setBackground(Color.black);
+		choice3.setForeground(Color.white);
+		choice3.setFont(normalFont);
+		choice3.setFocusPainted(false);
+		choice3.addActionListener(choiceHandler);
+		choice3.setActionCommand("c3");
+		choiceButtonPanel.add(choice3);
+		
+		choice4 = new JButton("Choice Four");
+		choice4.setBackground(Color.black);
+		choice4.setForeground(Color.white);
+		choice4.setFont(normalFont);
+		choice4.setFocusPainted(false);
+		choice4.addActionListener(choiceHandler);
+		choice4.setActionCommand("c4");
+		choiceButtonPanel.add(choice4);
+		
+		playerPanel = new JPanel();
+		playerPanel.setBounds(100, 50, 600, 50);
+		playerPanel.setBackground(Color.black);
+		playerPanel.setLayout(new GridLayout(1,4));
+		con.add(playerPanel);
+		
+		pokemonLabel = new JLabel("Pokemon:");
+		pokemonLabel.setFont(normalFont);
+		pokemonLabel.setForeground(Color.white);
+		playerPanel.add(pokemonLabel);
+		
+		pokemonLabelName = new JLabel();
+		pokemonLabelName.setFont(normalFont);
+		pokemonLabelName.setForeground(Color.white);
+		playerPanel.add(pokemonLabelName);
+		
+
+        hpLabel = new JLabel("HP:");
+		hpLabel.setFont(normalFont);
+		hpLabel.setForeground(Color.white);
+		playerPanel.add(hpLabel);
+		
+		hpLabelNumber = new JLabel();
+		hpLabelNumber.setFont(normalFont);
+		hpLabelNumber.setForeground(Color.white);
+		playerPanel.add(hpLabelNumber);
+		
+		playerSetup();
+
+	}
+	
+	public void playerSetup() {
+		pokemonHP = 15;
+		maxPokemonHP = 15;
+		snorlaxHP = 20;
+		pokemon = "Pikachu";
+		pokemonLabelName.setText(pokemon);
+		hpLabelNumber.setText("" + pokemonHP);
+		
+		townGate();
+	} 
+	
+	public void townGate(){
+		position = 11;
+		mainTextArea.setText("You are at the gate of the town.\nA trainer is standing in front of you. \n\n What do you do?");
+		choice1.setText("Talk to the trainer");
+		choice2.setText("Battle the trainer");
+		choice3.setText("Leave");
+		choice4.setText("");
+		
+		
+		
+	} 
+	
+	public void talkTrainer(){
+		position = 12;
+		mainTextArea.setText("Trainer: Hello there, \nWelcome to Vermilion City! Our trainer league is \nstarting soon but you look far too weak to enter. \nScram!");
+		choice1.setText(">");
+		choice2.setText("");
+		choice3.setText("");
+		choice4.setText("");
+	} 
+	
+
+	public void battleTrainer() {
+		position = 13;
+		mainTextArea.setText("Trainer:\n Ha! You think you can beat me? \n The trainer's beedrill fought back and hit pikachu.\n (Pikachu received 3 damage points.)");
+		pokemonHP = pokemonHP - 3;
+		if(pokemonHP < 1) {
+			pokemonHP = 0;
+			hpLabelNumber.setText("" + pokemonHP);
+			lose();
+		}
+		hpLabelNumber.setText("" + pokemonHP);
+		choice1.setText(">");
+		choice2.setText("");
+		choice3.setText("");
+		choice4.setText("");
+		
+	
+	}
+	
+	public void trailHead() {
+		position = 14;
+		mainTextArea.setText("You are at a trailhead.\nIf you go south, you will go back to the town.");
+		choice1.setText("Go North");
+		choice2.setText("Go East");
+		choice3.setText("Go South");
+		choice4.setText("Go West");
+		
+	} 
+	
+	public void north() {
+		position = 15;
+		mainTextArea.setText("You found a potion.\nYou use the potion on Pikachu.\n\n(Pikachu recovered 2 HP.)");
+		pokemonHP = pokemonHP + 2;
+		if(pokemonHP>maxPokemonHP) {
+			pokemonHP = maxPokemonHP;
+		}
+		hpLabelNumber.setText("" + pokemonHP);
+		choice1.setText("Go South");
+		choice2.setText("");
+		choice3.setText("");
+		choice4.setText("");
+	} 
+	
+	public void east() {
+		position = 16;
+		mainTextArea.setText("You walked into the forest\nand found a thunder stone and evolved Pikachu.\n\n(You now have Raichu)");
+        pokemon = "Raichu";
+		pokemonLabelName.setText("Raichu");
+		choice1.setText("Go West");
+		choice2.setText("");
+		choice3.setText("");
+		choice4.setText("");
+	} 
+	
+	public void west() {
+		position = 17;
+		
+		if(caught == 0) {
+		mainTextArea.setText("You encounter a wild angry snorlax!\n\n What will you do?");
+		choice1.setText("Battle");
+		choice2.setText("Run");
+		choice3.setText("");
+		choice4.setText("");
+		} 
+		else {
+			defeatedSnorlax();
+		}
+	} 
+	
+	public void fight() {
+		position = 18;
+		mainTextArea.setText("Snorlax HP: " + snorlaxHP + "\n\nWhat do you do?");
+		choice1.setText("Attack");
+		choice2.setText("Run");
+		choice3.setText("");
+		choice4.setText("");
+	} 
+	
+	public void playerAttack() {
+		position = 19;
+		
+		int playerDamage = 0;
+		
+		if(pokemon.equals("Pikachu")) {
+			playerDamage = new java.util.Random().nextInt(3);
+		} 
+		
+		else if (pokemon.equals("Raichu")) {
+			playerDamage = new java.util.Random().nextInt(8);
+		}
+		
+		mainTextArea.setText("You attacked the wild snorlax and\ndealt " + playerDamage + " damage!");
+		snorlaxHP = snorlaxHP - playerDamage;
+		
+		choice1.setText(">");
+		choice2.setText("");
+		choice3.setText("");
+		choice4.setText("");
+	} 
+	
+	public void snorlaxAttack() {
+		position = 20;
+		int monsterDamage = 0;
+		
+		monsterDamage = new java.util.Random().nextInt(6);
+		mainTextArea.setText("The monster attacked you and dealt you " + monsterDamage + " damage!");
+		pokemonHP = pokemonHP - monsterDamage;
+		hpLabelNumber.setText("" + pokemonHP);
+		choice1.setText(">");
+		choice2.setText("");
+		choice3.setText("");
+		choice4.setText("");
+		
+		if(pokemonHP<1) {
+			pokemonHP = 0;
+			hpLabelNumber.setText("" + pokemonHP);
+		}
+		
+	} 
+	
+	public void win() {
+		position = 21;
+		
+		mainTextArea.setText("Snorlax fainted!\nYou throw your pokeball.\n\n(You caught snorlax.)");
+		
+		caught = 1;
+		
+		choice1.setText("Go East");
+		choice2.setText("");
+		choice3.setText("");
+		choice4.setText("");
+	}
+	
+	public void lose() {
+		position = 22;
+		mainTextArea.setText("Your pokemon fainted!\n\nGAME OVER!");
+		choice1.setText(">");
+		choice2.setText("");
+		choice3.setText("");
+		choice4.setText("");
+		choice1.setVisible(true);
+		choice2.setVisible(false);
+		choice3.setVisible(false);
+		choice4.setVisible(false);
+		
+
+	} 
+	
+	public void ending() {
+		position = 23;
+		
+		mainTextArea.setText("Trainer:\nOh, you caught that troublesome Snorlax!?\nYou're tougher than I thought!\nPlease enter the trainer league!\nTHE END");
+		
+		choice1.setText(">");
+		choice2.setText("");
+		choice3.setText("");
+		choice4.setText("");
+		choice1.setVisible(true);
+		choice2.setVisible(false);
+		choice3.setVisible(false);
+		choice4.setVisible(false);
+	} 
+	
+	public void defeatedSnorlax() {
+		position = 24;
+		mainTextArea.setText("Snorlax's berries that he left behind are on the \n path.There is nothing left to see here.");
+		choice1.setText(">");
+		choice2.setText("");
+		choice3.setText("");
+		choice4.setText("");
+	} 
+	
+	public void beginNewGame() {
+		mainTextPanel.setVisible(false);
+		choiceButtonPanel.setVisible(false);
+		playerPanel.setVisible(false);
+		titleNamePanel.setVisible(true);
+		startButtonPanel.setVisible(true);
+	} 
+
+	
+	public class TitleScreenHandler implements ActionListener {
+		
+		public void actionPerformed(ActionEvent event){
+			
+			createGameScreen();
+		} //End of public class TitleScreenHandler implements ActionListener
+	} //End of public void createGameScreen()
+	public class ChoiceHandler implements ActionListener {
+		public void actionPerformed(ActionEvent event){
+			
+			String yourChoice = event.getActionCommand();
+			
+			switch(position){
+			case 11:
+				switch(yourChoice){
+				case "c1": if(caught ==1) {
+					ending(); break;
+				}
+				else {
+					talkTrainer(); break;
+				} //End of else
+				case "c2": battleTrainer(); break;
+				case "c3": trailHead(); break;
+				} //End of switch(yourChoice)
+				break;
+				
+			case 12:
+				switch(yourChoice) {
+				case "c1": townGate(); break;
+				} // End of switch(yourChoice)
+				break;
+				
+			case 13:
+				switch(yourChoice) {
+				case "c1": townGate(); break;
+				} // End of switch(yourChoice)
+				break;
+			case 14:
+				switch(yourChoice) {
+				case "c1": north(); break;
+				case "c2": east(); break;
+				case "c3": townGate(); break; //townGate(); is south
+				case "c4": west(); break;
+				} // End of switch(yourChoice)
+				break;
+			case 15:
+				switch(yourChoice) {
+				case "c1": trailHead(); break;
+				} // End of switch(yourChoice)
+				break;
+			case 16:
+				switch(yourChoice) {
+				case "c1": trailHead(); break;
+				} // End of switch(yourChoice)
+				break;
+			case 17:
+				switch(yourChoice) {
+				case "c1": fight(); break;
+				case "c2": trailHead(); break;
+				} // End of switch(yourChoice)
+				break;
+			case 18:
+				switch(yourChoice) {
+				case "c1": playerAttack(); break;
+				case "c2": trailHead(); break;
+				} // End of switch(yourChoice)
+				break;
+			case 19:
+				switch(yourChoice) {
+				case "c1": 
+					if(snorlaxHP<1) {
+						win();
+					} //End of if(monsterHP<1)
+					else {
+						snorlaxAttack(); break;
+					} //End of else					
+				} // End of switch(yourChoice)
+				break;
+			case 20:
+				switch(yourChoice) {
+				case "c1":
+					if(pokemonHP<1) {
+						lose();
+					} //End of if(playerHP<1)
+					else {
+						fight();
+					} //End of else
+					break;
+				} // End of switch(yourChoice)
+				break;
+			case 21:
+				switch(yourChoice) {
+				case "c1": trailHead(); break;
+				} // End of switch(yourChoice)
+				break;
+			case 24:
+				switch(yourChoice) {
+				case "c1": trailHead(); break;
+				} // End of switch(yourChoice)
+				break;
+			case 22:
+				switch(yourChoice) {
+				case "c1": beginNewGame(); break;
+				} // End of switch(yourChoice)
+				break;
+			case 23:
+				switch(yourChoice) {
+				case "c1": beginNewGame(); break;
+				} // End of switch(yourChoice)
+				break;
+			} //End of switch(position)
+			
+		} //End of public void actionPerformed(ActionEvent event)
+	} //End of public class ChoiceHandler implements ActionListener
+} //End of public class Game();
+
